@@ -118,11 +118,11 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <Link href="/login" className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">
+                <Link href="/login" className="text-gray-300 cursor-pointer hover:text-white px-3 py-2 text-sm font-medium">
                   Log In
                 </Link>
                 <Link href="/signup">
-                  <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition-all duration-200">
+                  <button className="bg-gradient-to-r cursor-pointer from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition-all duration-200">
                     Sign Up
                   </button>
                 </Link>

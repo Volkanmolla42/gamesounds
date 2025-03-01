@@ -1,8 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
   // API anahtarı gibi hassas bilgilerin sadece API route gibi sunucu bileşenlerinde
   // kullanılabilmesini sağlar, client-side'a gönderilmez
-  env: {},
+  env: {
+    // Public environment variables that can be used in the browser
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+  },
+  // External image domains that are allowed
+  images: {
+    domains: ['randomuser.me',"images.unsplash.com"],
+  },
   // API rotasına yapılan isteklerde CORS hatalarını önlemek için
   async headers() {
     return [
@@ -16,7 +24,13 @@ const nextConfig = {
         ],
       },
     ]
-  }
+  },
+  // Ensure middleware works correctly
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['localhost:3000'],
+    },
+  },
 };
 
 export default nextConfig;

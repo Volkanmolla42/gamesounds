@@ -1,7 +1,18 @@
 import { ElevenLabsClient } from "elevenlabs";
+import { isAuthenticated } from "@/lib/auth";
 
 export async function POST(request) {
   try {
+    // Check if user is authenticated
+    if (!isAuthenticated(request)) {
+      return new Response(JSON.stringify({ error: 'Unauthorized. Please login to use this feature.' }), {
+        status: 401,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+    
     const { text, duration } = await request.json();
     
     const client = new ElevenLabsClient({ 

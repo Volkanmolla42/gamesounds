@@ -47,29 +47,48 @@ export function AuthProvider({ children }) {
   // Get user profile
   const getUserProfile = async (userId) => {
     try {
+      if (!userId) {
+        console.log('No user ID provided to getUserProfile');
+        return;
+      }
+
       const { data, error } = await supabase
         .from('user_profiles')
         .select('*')
         .eq('user_id', userId)
-        .single()
+        .single();
 
-      if (error) throw error
+      if (error) {
+        // If the error is because the profile doesn't exist (404), create a new one
+        if (error.code === 'PGRST116') {
+          console.log('User profile not found, creating new profile');
+          return await createUserProfile(userId);
+        }
+        
+        // Otherwise, it's a different error
+        throw error;
+      }
 
       if (data) {
-        setCredits(data.remaining_credits || 0)
-        setSubscription(data.subscription_type || 'free')
-      } else {
-        // If profile does not exist, create a new profile (first registration)
-        await createUserProfile(userId)
+        setCredits(data.remaining_credits || 0);
+        setSubscription(data.subscription_type || 'free');
       }
     } catch (error) {
-      console.error('Error fetching user profile:', error)
+      console.error('Error fetching user profile:', error);
+      // Provide a fallback for the user to have some credits
+      setCredits(5);
+      setSubscription('free');
     }
-  }
+  };
 
   // Create new user profile
   const createUserProfile = async (userId) => {
     try {
+      if (!userId) {
+        console.log('No user ID provided to createUserProfile');
+        return;
+      }
+      
       // Create 10 credits for new free users
       const { data, error } = await supabase
         .from('user_profiles')
@@ -80,16 +99,22 @@ export function AuthProvider({ children }) {
             remaining_credits: 10
           }
         ])
+        .select();
 
-      if (error) throw error
+      if (error) throw error;
       
       // Set profile
-      setCredits(10)
-      setSubscription('free')
+      setCredits(10);
+      setSubscription('free');
+      return data;
     } catch (error) {
-      console.error('Error creating user profile:', error)
+      console.error('Error creating user profile:', error);
+      // Provide a fallback
+      setCredits(5);
+      setSubscription('free');
+      return null;
     }
-  }
+  };
 
   // Use credit
   const spendCredit = async () => {
