@@ -1,70 +1,70 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useAuth } from '../../context/AuthContext'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import Navbar from '../../components/Navbar'
-import Footer from '../../components/Footer'
-import { Button } from '../../components/Button'
-import { toast, Toaster } from 'react-hot-toast'
+import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import { Button } from "../../components/Button";
+import { toast, Toaster } from "react-hot-toast";
 
 export default function SignUp() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const { signUpWithEmail } = useAuth()
-  const router = useRouter()
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { signUpWithEmail, user } = useAuth();
+  const router = useRouter();
+  if (user) {
+    router.push("/");
+  }
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (!email.trim() || !password.trim()) {
-      toast.error('Please fill in all fields')
-      return
+      toast.error("Please fill in all fields");
+      return;
     }
-    
-    
-    
+
     if (password.length < 6) {
-      toast.error('Password must be at least 6 characters')
-      return
+      toast.error("Password must be at least 6 characters");
+      return;
     }
-    
-    setLoading(true)
-    
+
+    setLoading(true);
+
     try {
-      const { success, error } = await signUpWithEmail(email, password)
-      
+      const { success, error } = await signUpWithEmail(email, password);
+
       if (success) {
-        toast.success('Your account has been created successfully! Please log in.')
-        router.push('/login?registered=true')
+        toast.success("Your account has been created successfully");
+        router.push("/");
       } else {
-        toast.error(error || 'An error occurred during registration')
+        toast.error(error || "An error occurred during registration");
       }
     } catch (error) {
-      toast.error('An unexpected error occurred')
-      console.error('Registration error:', error)
+      toast.error("An unexpected error occurred");
+      console.error("Registration error:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-900 to-gray-800 text-white">
       <Navbar />
-      
-      <Toaster 
+
+      <Toaster
         position="top-center"
         toastOptions={{
           duration: 3000,
           style: {
-            background: '#363636',
-            color: '#fff',
-          }
+            background: "#363636",
+            color: "#fff",
+          },
         }}
       />
-      
+
       <main className="flex-grow container mx-auto px-4 py-24 flex items-center justify-center">
         <div className="w-full max-w-md">
           <div className="bg-gray-800 bg-opacity-60 rounded-2xl p-8 shadow-xl backdrop-blur-sm backdrop-filter border border-gray-700">
@@ -79,7 +79,10 @@ export default function SignUp() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                >
                   Email Address
                 </label>
                 <input
@@ -94,7 +97,10 @@ export default function SignUp() {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                >
                   Password
                 </label>
                 <input
@@ -106,7 +112,9 @@ export default function SignUp() {
                   className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                   placeholder="••••••••"
                 />
-                <p className="mt-1 text-sm text-gray-400">Must be at least 6 characters</p>
+                <p className="mt-1 text-sm text-gray-400">
+                  Must be at least 6 characters
+                </p>
               </div>
 
               <Button
@@ -123,23 +131,37 @@ export default function SignUp() {
 
             <div className="mt-8 text-center">
               <p className="text-gray-400">
-                Already have an account?{' '}
-                <Link href="/login" className="text-purple-400 hover:text-purple-300 font-medium">
+                Already have an account?{" "}
+                <Link
+                  href="/login"
+                  className="text-purple-400 hover:text-purple-300 font-medium"
+                >
                   Log In
                 </Link>
               </p>
             </div>
-            
+
             <div className="mt-8 pt-6 border-t border-gray-700">
               <p className="text-sm text-center text-gray-400">
-                By signing up, you agree to our <Link href="/terms" className="text-purple-400 hover:underline">Terms of Service</Link> and <Link href="/privacy" className="text-purple-400 hover:underline">Privacy Policy</Link>.
+                By signing up, you agree to our{" "}
+                <Link href="/terms" className="text-purple-400 hover:underline">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="/privacy"
+                  className="text-purple-400 hover:underline"
+                >
+                  Privacy Policy
+                </Link>
+                .
               </p>
             </div>
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
-  )
+  );
 }

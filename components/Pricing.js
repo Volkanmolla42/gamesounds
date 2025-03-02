@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { Button } from './Button'
-import { motion } from 'framer-motion'
+import { Button } from "./Button";
+import { motion } from "framer-motion";
 
 const pricingPlans = [
   {
@@ -9,29 +9,29 @@ const pricingPlans = [
     price: "$0",
     period: "forever",
     features: [
-      "10 sound generations per day",
+      "5 sound generations",
       "Standard quality audio",
       "Basic customization options",
       "MP3 downloads only",
-      "Community support"
+      "Community support",
     ],
     cta: "Get Started",
-    highlighted: false
+    highlighted: false,
   },
   {
     name: "Pro",
     price: "$12",
     period: "per month",
     features: [
-      "100 sound generations per day",
+      "100 sound generations",
       "High quality audio",
       "Advanced customization options",
       "WAV & MP3 downloads",
       "Priority support",
-      "No watermarks"
+      "No watermarks",
     ],
     cta: "Upgrade to Pro",
-    highlighted: true
+    highlighted: true,
   },
   {
     name: "Enterprise",
@@ -44,11 +44,11 @@ const pricingPlans = [
       "All file formats",
       "Dedicated support",
       "API access",
-      "Commercial license"
+      "Commercial license",
     ],
     cta: "Contact Sales",
-    highlighted: false
-  }
+    highlighted: false,
+  },
 ];
 
 export default function Pricing() {
@@ -74,22 +74,32 @@ export default function Pricing() {
               whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
               className={`relative p-8 bg-gray-800 rounded-2xl shadow-xl border ${
                 plan.highlighted
-                  ? 'border-purple-500 transform scale-105'
-                  : 'border-gray-700'
+                  ? "border-purple-500 transform scale-105"
+                  : "border-gray-700"
               } hover:border-purple-500 transition-all duration-300`}
             >
               <div className="flex-1">
                 <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
                 <div className="flex items-end justify-center">
-                  <span className="text-4xl font-bold text-white">{plan.price}</span>
+                  <span className="text-4xl font-bold text-white">
+                    {plan.price}
+                  </span>
                   <span className="text-gray-400 ml-1">/{plan.period}</span>
                 </div>
 
                 <ul className="mt-8 space-y-4">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center">
-                      <svg className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                      <svg
+                        className="h-5 w-5 text-green-500"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                       <span className="ml-3 text-gray-300">{feature}</span>
                     </li>

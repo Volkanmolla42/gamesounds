@@ -1,63 +1,67 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useAuth } from '../../context/AuthContext'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import Navbar from '../../components/Navbar'
-import Footer from '../../components/Footer'
-import { Button } from '../../components/Button'
-import { toast, Toaster } from 'react-hot-toast'
+import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import { Button } from "../../components/Button";
+import { toast, Toaster } from "react-hot-toast";
 
 export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const { signInWithEmail } = useAuth()
-  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { signInWithEmail } = useAuth();
+  const router = useRouter();
 
+  const { user } = useAuth();
+  if (user) {
+    router.push("/");
+  }
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (!email.trim() || !password.trim()) {
-      toast.error('Please enter your email and password')
-      return
+      toast.error("Please enter your email and password");
+      return;
     }
-    
-    setLoading(true)
-    
+
+    setLoading(true);
+
     try {
-      const { success, error } = await signInWithEmail(email, password)
-      
+      const { success, error } = await signInWithEmail(email, password);
+
       if (success) {
-        toast.success('Successfully logged in')
-        router.push('/')
+        toast.success("Successfully logged in");
+        router.push("/");
       } else {
-        toast.error(error || 'Error during login')
+        toast.error(error || "Error during login");
       }
     } catch (error) {
-      toast.error('An unexpected error occurred')
-      console.error('Login error:', error)
+      toast.error("An unexpected error occurred");
+      console.error("Login error:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-900 to-gray-800 text-white">
       <Navbar />
-      
-      <Toaster 
+
+      <Toaster
         position="top-center"
         toastOptions={{
           duration: 3000,
           style: {
-            background: '#363636',
-            color: '#fff',
-          }
+            background: "#363636",
+            color: "#fff",
+          },
         }}
       />
-      
+
       <main className="flex-grow container mx-auto px-4 py-24 flex items-center justify-center">
         <div className="w-full max-w-md">
           <div className="bg-gray-800 bg-opacity-60 rounded-2xl p-8 shadow-xl backdrop-blur-sm backdrop-filter border border-gray-700">
@@ -72,7 +76,10 @@ export default function Login() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                >
                   Email Address
                 </label>
                 <input
@@ -88,10 +95,16 @@ export default function Login() {
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-300"
+                  >
                     Password
                   </label>
-                  <Link href="/forgot-password" className="text-sm text-purple-400 hover:text-purple-300">
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-purple-400 hover:text-purple-300"
+                  >
                     Forgot Password
                   </Link>
                 </div>
@@ -120,23 +133,37 @@ export default function Login() {
 
             <div className="mt-8 text-center">
               <p className="text-gray-400">
-                Don&apos;t have an account?{' '}
-                <Link href="/signup" className="text-purple-400 hover:text-purple-300 font-medium">
+                Don&apos;t have an account?{" "}
+                <Link
+                  href="/signup"
+                  className="text-purple-400 hover:text-purple-300 font-medium"
+                >
                   Sign Up
                 </Link>
               </p>
             </div>
-            
+
             <div className="mt-8 pt-6 border-t border-gray-700">
               <p className="text-sm text-center text-gray-400">
-                By logging in, you agree to our <Link href="/terms" className="text-purple-400 hover:underline">Terms of Service</Link> and <Link href="/privacy" className="text-purple-400 hover:underline">Privacy Policy</Link>.
+                By logging in, you agree to our{" "}
+                <Link href="/terms" className="text-purple-400 hover:underline">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="/privacy"
+                  className="text-purple-400 hover:underline"
+                >
+                  Privacy Policy
+                </Link>
+                .
               </p>
             </div>
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
-  )
+  );
 }
